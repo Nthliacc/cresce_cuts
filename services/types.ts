@@ -1,5 +1,5 @@
 interface ProductResponseType {
-    id: number;
+    id: number | string;
     title: string
     price:  string;
     category:  string;
@@ -8,7 +8,7 @@ interface ProductResponseType {
 }
 
 interface ProductType {
-    id?: number;
+    id?: number | string;
     title: string
     price:  string;
     category:  string;
@@ -18,10 +18,9 @@ interface ProductType {
     activationDate: string;
     inactivationDate: string;
     discountType: {
-        label: "Selecione" | "Leve + Pague -" | "Percentual" | "De / Por";
+        label: "Selecione" | "Leve + Pague Menos" | "Percentual" | "De / Por";
         value: "0" | "1" | "2" | "3";
     };
-    status: boolean;
     discountPercentage: number;
     priceDe: string;
     pricePor: string;

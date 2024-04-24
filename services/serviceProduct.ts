@@ -2,6 +2,11 @@ import { getLocalStorage, setLocalStorage } from "./localStorage";
 
 const getAllProduct = async () => {
     try {
+        const storageData = getLocalStorage("products");
+        if (storageData) {
+            return storageData;
+        }
+
         const response = await fetch("https://fakestoreapi.com/products?limit=6");
         const data = await response.json();
 
@@ -10,7 +15,7 @@ const getAllProduct = async () => {
             const activationDate = generateRandomDate();
             const inactivationDate = generateRandomDate();
             const discountTypes = [
-                { value: "1", label: "Leve + Pague -" },
+                { value: "1", label: "Leve + Pague Menos" },
                 { value: "2", label: "Percentual" },
                 { value: "3", label: "De / Por" },
             ];
@@ -27,9 +32,8 @@ const getAllProduct = async () => {
                 status: randomStatus,
             };
         });
-        const storageData = getLocalStorage("products");
 
-        return storageData ? [...storageData, ...productsWithAdditionalData] : productsWithAdditionalData;
+        return productsWithAdditionalData;
     } catch (error) {
         console.error(error);
     }
@@ -44,25 +48,69 @@ const generateRandomDate = () => {
 
 const createProduct = async (product: ProductType) => {
     try {
-        const response = await fetch("https://fakestoreapi.com/products", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(product),
-        });
-
         const productsStorage = getLocalStorage("products");
-        if (productsStorage) {
-            setLocalStorage("products", [...productsStorage, product]);
-        } else {
-            setLocalStorage("products", [product]);
-        }
 
-        return await response.json();
+        if (productsStorage) {
+            const data = [...productsStorage, product];
+            setLocalStorage("products", data);
+
+            return product;
+        } else {
+            const response = await fetch("https://fakestoreapi.com/products", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(product),
+            });
+
+            setLocalStorage("products", [product]);
+
+            return await response.json();
+        }
     } catch (error) {
         console.error(error);
     }
 }
 
-export { getAllProduct, createProduct };
+const editProduct = async (product: ProductType) => {
+    try {
+        const productsStorage = getLocalStorage("products");
+
+        if (productsStorage) {
+            const updatedProducts = productsStorage.map((p: ProductType) => {
+                if (p.id === product.id) {
+                    return product;
+                }
+                return p;
+            });
+
+            setLocalStorage("products", updatedProducts);
+
+            return product;
+        } else {
+            const response = await fetch(`https://fakestoreapi.com/products/${product.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(product),
+            });
+
+            const updatedProducts = productsStorage.map((p: ProductType) => {
+                if (p.id === product.id) {
+                    return product;
+                }
+                return p;
+            });
+
+            setLocalStorage("products", updatedProducts);
+
+            return await response.json();
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+export { getAllProduct, createProduct, editProduct };

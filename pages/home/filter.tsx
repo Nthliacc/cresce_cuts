@@ -21,6 +21,7 @@ export default function FilterPage() {
     return (
         <div className="flex justify-between px-4 py-6 gap-4">
             <Select
+                name="statusFilter"
                 label="Status"
                 value={statusFilter.value}
                 options={[
@@ -33,6 +34,7 @@ export default function FilterPage() {
                 }
             />
             <Select
+                name="typeFilter"
                 label="Tipo desconto"
                 value={typeFilter.value}
                 options={[

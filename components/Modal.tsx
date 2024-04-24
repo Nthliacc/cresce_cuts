@@ -11,11 +11,13 @@ const Modal = () => {
 
     if (!isOpenModal || !selectedProduct) return null;
 
-    const { id, title, price, description, image, discountType } = selectedProduct;
+    const { id, title, price, description, image, discountType, take, discountPercentage, payment } = selectedProduct;
 
     const handleEdit = () => {
         router.push(`/${id}/edit`);
     };
+
+    const percentual = Number(price) * (discountPercentage / 100);
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -26,7 +28,7 @@ const Modal = () => {
                         <IconButton
                             className="absolute right-4"
                             onClick={closeModal}
-                            icon={<Image src="/CLOSE.svg" alt="Close" width={25} height={25} />}
+                            icon={<Image src="/images/CLOSE.svg" alt="Close" width={25} height={25} />}
                         />
                     </div>
                 </div>
@@ -42,19 +44,19 @@ const Modal = () => {
                     </div>
                     <div className="w-full lg:w-1/2 p-4 flex flex-col gap-4">
                     {
-                                discountType === "Leve + Pague Menos" ? (
-                                    <p className="font-medium text-2xl">Leve 5 Pague Menos 2</p>
-                                ) : discountType === "Percentual" ? (
-                                    <p className="font-semibold text-2xl">10% de desconto</p>
+                                discountType.label === "Leve + Pague Menos" ? (
+                                    <p className="font-medium text-2xl">Leve {take} Pague {payment} </p>
+                                ) : discountType.label === "Percentual" ? (
+                                    <p className="font-semibold text-2xl">{discountPercentage}% de desconto</p>
                                 ) : null
                             }
                         <p className="font-normal text-lg">{title}</p>
                         <p>{description}</p>
                         {
-                                discountType !== "Leve + Pague Menos" ? (
+                                discountType.label !== "Leve + Pague Menos" ? (
                                     <div>
-                                        <p className="font-normal text-xl line-through">{discountType === "De / por" && 'de'} R$ {price}</p>
-                                        <p className="font-medium text-2xl">{discountType === "De / por" && 'por'} R$ {price}</p>
+                                        <p className="font-normal text-xl line-through">{discountType.label === "De / Por" && 'de'} R$ {price}</p>
+                                        <p className="font-medium text-2xl">{discountType.label === "De / Por" && 'por'} R$ {percentual}</p>
                                     </div>
                                 ) : (
                                     <p className="font-medium text-2xl">R$ {price}</p>

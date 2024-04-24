@@ -20,6 +20,7 @@ interface ProductsContextValue {
     typeFilter: SelectType;
     statusFilter: SelectType;
     loading: boolean;
+    switchStatus: (statusSwitch: boolean, id: string | number) => void;
 }
 
 export const ProductsContext = createContext<ProductsContextValue>({
@@ -40,7 +41,8 @@ export const ProductsContext = createContext<ProductsContextValue>({
         value: "0",
         label: "Selecione",
     },
-    loading: false
+    loading: false,
+    switchStatus: () => { },
 });
 
 export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -67,19 +69,31 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         filterProducts(statusFilter.value, typeFilter.value);
     }, [statusFilter.value, typeFilter.value, products]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const filterProducts = (statusFilter: string, typeFilter: string) => {
+    const filterProducts = (statusValue: string, typeValue: string) => {
+        console.log(statusValue, typeValue);
         const filtered = products.filter((product) => {
-            if (statusFilter !== "0" && product.status !== (statusFilter === "1")) {
+            if (statusValue !== "0" && product.isActivated !== (statusValue === "1" ? true : false)) {
                 return false;
             }
-            if (typeFilter !== "0" && product.discountType.value !== typeFilter) {
+            if (typeValue !== "0" && product.discountType.value !== typeValue) {
                 return false;
             }
             return true;
         });
+        console.log(filtered);
         setFilteredProducts(filtered);
     };
     
+    const switchStatus = (statusSwitch: boolean, id: string | number ) => {
+        const filtered = products.map((product) => {
+            if (product.id === id) {
+                product.isActivated = statusSwitch;
+            }
+            return product;
+        });
+        setProducts(filtered);
+    }
+
     const openModal = (product: ProductType) => {
         setIsOpenModal(true);
         setSelectedProduct(product);
@@ -87,14 +101,13 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
     const closeModal = () => {
         setIsOpenModal(false);
-        setSelectedProduct(null);
     };
 
     return (
         <ProductsContext.Provider
             value={{
                 products, filteredProducts, filterProducts, openModal, closeModal, selectedProduct,
-                isOpenModal, setTypeFilter, setStatusFilter, typeFilter, statusFilter, loading
+                isOpenModal, setTypeFilter, setStatusFilter, typeFilter, statusFilter, loading, switchStatus
             }}>
             {children}
         </ProductsContext.Provider>

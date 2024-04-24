@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import Input from "@/components/Input";
 import Select from "@/components/Select";
@@ -22,17 +22,17 @@ export default function Register() {
             value: "0",
             label: "Selecione",
         },
-        status: false,
         discountPercentage: 0,
         priceDe: "",
         pricePor: "",
         take: "",
         payment: "",
     });
+    const id = useId();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        createProduct(formData);
+        createProduct({ ...formData, id: id.toString() });
         router.push("/");
     };
 
@@ -43,7 +43,7 @@ export default function Register() {
                 ...formData,
                 discountType: {
                     value: value as "0" | "1" | "2" | "3",
-                    label: name as "Selecione" | "Leve + Pague -" | "Percentual" | "De / Por",
+                    label: name as "Selecione" | "Leve + Pague Menos" | "Percentual" | "De / Por",
                 },
             });
             return;
@@ -83,9 +83,9 @@ export default function Register() {
                     <Switch label="Ativo"
                         onClick={() => setFormData({
                             ...formData,
-                            status: !formData.status,
+                            isActivated: !formData.isActivated,
                         })}
-                        active={formData.status} />
+                        active={formData.isActivated} />
                 </div>
                 <form className="flex flex-col space-y-4 gap-2 py-4" onSubmit={handleSubmit}>
                     <Input
@@ -109,7 +109,7 @@ export default function Register() {
                             { value: "0", label: "Selecione" },
                             { value: "1", label: "Porcentagem" },
                             { value: "2", label: "DE / POR" },
-                            { value: "3", label: "Leve + Pague -" },
+                            { value: "3", label: "Leve + Pague Menos" },
                         ]}
                         onChange={handleChange}
                     />

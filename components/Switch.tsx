@@ -3,15 +3,16 @@ import { useState } from 'react';
 
 interface SwitchProps {
   label?: string;
-  active?: boolean;
-  onClick?: () => void;
+  active: boolean;
+  onClick: () => void;
 }
 
 const Switch = ({active, label, onClick}: SwitchProps ) => {
-  const [ligado, setLigado] = useState(active || false);
+  const [ligado, setLigado] = useState(active);
 
   const alternarSwitch = () => {
     setLigado((prevLigado) => !prevLigado);
+    onClick();
   };
 
   return (

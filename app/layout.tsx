@@ -31,14 +31,14 @@ export default function RootLayout({
       <body className={rubik.className}>
         <div className="flex">
           <nav className="flex flex-col items-center py-4 bg-background-menu w-[256px] fixed h-full">
-            <Image src="/VALE-VANTAGENS.svg" alt="Vale Vantagens" width={150} height={80} />
+            <Image src="/images/VALE-VANTAGENS.svg" alt="Vale Vantagens" width={150} height={80} />
             <ul className="flex flex-col p-4 gap-2 text-white font-normal text-xs w-full">
               {
                 menuList.map((item, index) => (
                   <li key={index}>
                     <a href={item.link} className="flex justify-between items-center">
                         <p>{item.name}</p>
-                        <Image src="/CHEVRON.svg" alt={item.name} width={20} height={30} />
+                        <Image src="/images/CHEVRON.svg" alt={item.name} width={20} height={30} />
                     </a>
                   </li>
                 ))
