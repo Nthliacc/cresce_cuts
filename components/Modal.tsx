@@ -17,7 +17,7 @@ const Modal = () => {
         router.push(`/${id}/edit`);
     };
 
-    const percentual = Number(price) * (discountPercentage / 100);
+    const priceEnd = discountPercentage ? Number(price) * (discountPercentage / 100) : price;
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -56,7 +56,7 @@ const Modal = () => {
                                 discountType.label !== "Leve + Pague Menos" ? (
                                     <div>
                                         <p className="font-normal text-xl line-through">{discountType.label === "De / Por" && 'de'} R$ {price}</p>
-                                        <p className="font-medium text-2xl">{discountType.label === "De / Por" && 'por'} R$ {percentual}</p>
+                                        <p className="font-medium text-2xl">{discountType.label === "De / Por" && 'por'} R$ {priceEnd}</p>
                                     </div>
                                 ) : (
                                     <p className="font-medium text-2xl">R$ {price}</p>

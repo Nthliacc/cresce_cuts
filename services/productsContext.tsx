@@ -70,7 +70,6 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }, [statusFilter.value, typeFilter.value, products]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const filterProducts = (statusValue: string, typeValue: string) => {
-        console.log(statusValue, typeValue);
         const filtered = products.filter((product) => {
             if (statusValue !== "0" && product.isActivated !== (statusValue === "1" ? true : false)) {
                 return false;
@@ -80,7 +79,6 @@ export const ProductsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             }
             return true;
         });
-        console.log(filtered);
         setFilteredProducts(filtered);
     };
     

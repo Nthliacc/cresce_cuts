@@ -31,7 +31,7 @@ const ProductTable = () => {
                             <td>{product.activationDate}</td>
                             <td>{product.inactivationDate}</td>
                             <td className="flex">
-                                <Switch onClick={() => switchStatus(product.isActivated, product.id || '')} active={product.isActivated} />
+                                <Switch onClick={() => switchStatus(!product.isActivated, product.id || '')} active={product.isActivated} />
                                 <IconButton
                                     icon={<Image src="/images/EyeAdd.svg" alt="edit" width={30} height={30} />}
                                     onClick={openModal.bind(null, product)}
